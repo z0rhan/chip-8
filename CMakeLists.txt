@@ -22,3 +22,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     pthread
     dl
 )
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
+
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)

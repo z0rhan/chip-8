@@ -16,6 +16,13 @@ void setup_config(config_t* config, int argc, char* argv[]);
 
 int main(int argc, char *argv[])
 {
+    if (argc < 2)
+    {
+        fprintf(stderr, "Usage: %s <rom_name>\n",
+                argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
     // Setup emulator options
     config_t config = {0};
     setup_config(&config, argc, argv);
@@ -28,7 +35,8 @@ int main(int argc, char *argv[])
     }
 
     chip8_t chip = {0};
-    if (!init_chip8(&chip))
+    const char* rom_name = argv[1];
+    if (!init_chip8(&chip, rom_name))
     {
         exit(EXIT_FAILURE);
     }
@@ -42,11 +50,16 @@ int main(int argc, char *argv[])
         // Handle inputs
         handle_input(&chip);
 
+        if (chip.state_ == PAUSED) continue;
+
+        // Emulate CHIP-8 instructions
+        emulate_instruction(&chip, config);
+
         // Delay for approx 60 fps
         SDL_Delay(16);
 
         // Update changes
-        update_screen(&sdl);
+        update_screen(&sdl, config, chip);
     }
 
     // Final cleanup
@@ -60,10 +73,11 @@ void setup_config(config_t* config, int argc, char* argv[])
     // Default values for now
     // TODO: allow flags to modify the initial options
     *config = (config_t)
-              {.widht_ = CHIP8_WIDHT,
-               .height_ = CHIP8_HEIGHT,
-               .fg_color_ = 0xFFFFFFFF,     // White
-               .bg_color_ = 0xFF0000FF,     // Red
-               .scale_factor_ = SCALE_FACTOR
+              {.width_          = CHIP8_WIDHT,
+               .height_         = CHIP8_HEIGHT,
+               .fg_color_       = 0xFFFFFFFF,     // Black
+               .bg_color_       = 0x000000FF,     // White
+               .scale_factor_   = SCALE_FACTOR,
+               .outlines_       = true
               };
 }
