@@ -14,7 +14,7 @@ bool init_SDL(sdl_t* sdl, const config_t* config)
                                     SDL_WINDOWPOS_CENTERED,
                                     config->width_ * config->scale_factor_,
                                     config->height_ * config->scale_factor_,
-                                    0);
+                                    SDL_WINDOW_SHOWN);
     if (!sdl->window_)
     {
         SDL_Log("Failed to create SDL window: %s\n",
@@ -120,10 +120,59 @@ void handle_input(chip8_t* chip)
                         {
                             chip->state_ = RUNNING;
                         }
+                        break;
 
+                    case SDLK_1: chip->keypad_[0x1] = true; break;
+                    case SDLK_2: chip->keypad_[0x2] = true; break;
+                    case SDLK_3: chip->keypad_[0x3] = true; break;
+                    case SDLK_4: chip->keypad_[0xC] = true; break;
 
+                    case SDLK_q: chip->keypad_[0x4] = true; break;
+                    case SDLK_w: chip->keypad_[0x5] = true; break;
+                    case SDLK_e: chip->keypad_[0x6] = true; break;
+                    case SDLK_r: chip->keypad_[0xD] = true; break;
+
+                    case SDLK_a: chip->keypad_[0x7] = true; break;
+                    case SDLK_s: chip->keypad_[0x8] = true; break;
+                    case SDLK_d: chip->keypad_[0x9] = true; break;
+                    case SDLK_f: chip->keypad_[0xE] = true; break;
+
+                    case SDLK_z: chip->keypad_[0xA] = true; break;
+                    case SDLK_x: chip->keypad_[0x0] = true; break;
+                    case SDLK_c: chip->keypad_[0xE] = true; break;
+                    case SDLK_v: chip->keypad_[0xF] = true; break;
+
+                    default:
+                        break;
                 }
                 break;
+
+            case SDL_KEYUP:
+                switch (event.key.keysym.sym)
+                {
+                    case SDLK_1: chip->keypad_[0x1] = false; break;
+                    case SDLK_2: chip->keypad_[0x2] = false; break;
+                    case SDLK_3: chip->keypad_[0x3] = false; break;
+                    case SDLK_4: chip->keypad_[0xC] = false; break;
+
+                    case SDLK_q: chip->keypad_[0x4] = false; break;
+                    case SDLK_w: chip->keypad_[0x5] = false; break;
+                    case SDLK_e: chip->keypad_[0x6] = false; break;
+                    case SDLK_r: chip->keypad_[0xD] = false; break;
+
+                    case SDLK_a: chip->keypad_[0x7] = false; break;
+                    case SDLK_s: chip->keypad_[0x8] = false; break;
+                    case SDLK_d: chip->keypad_[0x9] = false; break;
+                    case SDLK_f: chip->keypad_[0xE] = false; break;
+
+                    case SDLK_z: chip->keypad_[0xA] = false; break;
+                    case SDLK_x: chip->keypad_[0x0] = false; break;
+                    case SDLK_c: chip->keypad_[0xE] = false; break;
+                    case SDLK_v: chip->keypad_[0xF] = false; break;
+
+                    default:
+                        break;
+                }
 
             default:
                 break;

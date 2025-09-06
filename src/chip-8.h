@@ -13,6 +13,7 @@ typedef struct
     uint32_t    bg_color_;      // RGBA(8 bits each)
     uint32_t    scale_factor_;
     bool        outlines_;      // Draw pixel outlines
+    uint32_t    inst_per_sec_;   // CHIP8 CPU clock rate
 } config_t;
 
 typedef enum

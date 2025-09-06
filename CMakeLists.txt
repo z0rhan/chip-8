@@ -23,6 +23,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     dl
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
+option(DEBUG "Debug messages" OFF)
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+if (DEBUG)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DEBUG)
+endif()
+
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
